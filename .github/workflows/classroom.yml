@@ -1,0 +1,40 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: test_create_object
+      id: test_create_object
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: test_create_object
+        setup-command: ''
+        command: 'node tests/test_create_data.js '
+        timeout: 10
+        max-score: 5
+    - name: test_find_user_by_id
+      id: test_find_user_by_id
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: test_find_user_by_id
+        setup-command: ''
+        command: node tests/test_find_user.js
+        timeout: 10
+        max-score: 5
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TEST_CREATE_OBJECT_RESULTS: "${{steps.test_create_object.outputs.result}}"
+        TEST_FIND_USER_BY_ID_RESULTS: "${{steps.test_find_user_by_id.outputs.result}}"
+      with:
+        runners: test_create_object,test_find_user_by_id
