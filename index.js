@@ -24,7 +24,7 @@ const find_user = id => {
 
 // you can test your code here
  // Example usage
- const foundUser = find_user(0);
+ const foundUser = find_user(1);
  console.log(foundUser); // { id: 1, name: 'Un' }
 
 // DO NOT REMOVE THIS
